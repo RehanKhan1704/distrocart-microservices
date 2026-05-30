@@ -1,16 +1,18 @@
 package com.github.RehanKhan1704.dto;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-public record InventoryResponse (
-    @NotNull
+public record InventoryResponse(
+
+    @Schema(example = "1")
+    Long id,
+
+    @Schema(example = "1")
     Long productId,
-    @NotNull
-    @Min(0)
-    Integer quantity,
-    Boolean inStock
-){
 
-    
-}
+    @Schema(example = "100")
+    Integer quantity,
+
+    @Schema(example = "true")
+    Boolean inStock
+){}

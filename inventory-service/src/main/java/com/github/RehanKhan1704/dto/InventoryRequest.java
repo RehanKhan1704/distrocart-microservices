@@ -1,16 +1,23 @@
 package com.github.RehanKhan1704.dto;
 
-import jakarta.validation.constraints.Min;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record InventoryRequest(
-    @NotNull(message = "Product ID cannot be null")
+    
+    @Schema(
+        example = "1",
+        description = "Product Id"
+    )
+    @NotNull(message = "Product Id is required")
     Long productId,
-    @NotNull(message = "Quantity cannot be null")
-    @Min(value = 0, message = "Quantity cannot be negative")
-    Integer quantity,
-    @NotNull(message = "Reserved Quantity cannot be null")
-    @Min(value = 0, message = "Reserved Quantity cannot be negative")
-    Integer reservedQuantity
+
+    @Schema(
+        example = "100",
+        description = "Available Stock Quantity"
+    )
+    @Positive(message = "Quantity must be positive")
+    Integer quantity
 ){
 }

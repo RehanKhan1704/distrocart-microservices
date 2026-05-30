@@ -1,4 +1,4 @@
-package com.github.RehanKhan1704;
+package com.github.RehanKhan1704.entity;
 
 import jakarta.persistence.*;
 
@@ -22,6 +22,6 @@ public class Inventory {
     @Column(nullable = false)
     private Integer quantity;
 
-    @Column(name = "reserved_quantity", nullable = false)
-    private Integer reservedQuantity = 0;
+    @Column(name = "reserved_quantity",nullable = false)
+private Integer reservedQuantity = 0;
 }
