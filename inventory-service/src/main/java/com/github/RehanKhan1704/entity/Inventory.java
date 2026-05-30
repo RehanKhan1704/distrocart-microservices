@@ -1,7 +1,7 @@
 package com.github.RehanKhan1704.entity;
 
 import jakarta.persistence.*;
-
+import java.io.Serializable;
 import lombok.*;
 
 @Entity
@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Inventory {
+public class Inventory implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
