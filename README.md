@@ -221,10 +221,10 @@ PaymentCompletedEvent
 | ----------------- | ---- |
 | API Gateway       | 8080 |
 | Inventory Service | 8081 |
-| Payment Service   | 8082 |
+| Payment Service   | 8084 |
 | Order Service     | 8083 |
-| Auth Service      | 8084 |
-| Product Service   | 8085 |
+| Auth Service      | 8085 |
+| Product Service   | 8082 |
 | Eureka Server     | 8761 |
 
 ---
