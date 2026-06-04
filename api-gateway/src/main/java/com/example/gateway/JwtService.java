@@ -44,14 +44,14 @@ public class JwtService {
     public boolean validateToken(String token) {
 
         try {
-
+            System.out.println("VALIDATING TOKEN");
             String username = extractUsername(token);
-
+            System.out.println("USERNAME = " + username);
             return username != null
                     && !isTokenExpired(token);
 
         } catch (Exception e) {
-
+                e.printStackTrace();
             return false;
         }
     }
@@ -72,9 +72,9 @@ public class JwtService {
 
     private SecretKey getKey() {
 
-    return Keys.hmacShaKeyFor(
-            secret.getBytes()
-    );
+    byte[] keyBytes =
+            Decoders.BASE64.decode(secret);
 
-    }
+    return Keys.hmacShaKeyFor(keyBytes);
+}
 }

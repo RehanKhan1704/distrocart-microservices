@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.RehanKhan1704.dto.InventoryRequest;
 import com.github.RehanKhan1704.dto.InventoryResponse;
-import com.github.RehanKhan1704.service.InventoryServiceImpl;
+import com.github.RehanKhan1704.service.InventoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/inventories")
 public class InventoryController {
     
-    private final InventoryServiceImpl inventoryService;
+    private final InventoryService inventoryService;
 
     @Operation(
         summary = "Get All Products",
@@ -64,7 +64,7 @@ public class InventoryController {
         )
 })
     @GetMapping("/check-stock")
-    public ResponseEntity<Boolean> checkStock(@RequestParam("productId") Long productId, @RequestParam("quantity") Integer quantity){
+    public ResponseEntity<Boolean> checkStock(@RequestParam("productId") Long productId, @RequestParam ("quantity") Integer quantity){
         return ResponseEntity.ok(inventoryService.isInStock(productId, quantity));
     }
 
@@ -157,9 +157,9 @@ public class InventoryController {
             description = "Insufficient stock available"
         )
     })
-    @PostMapping("/{productId}/reserve")
-    public ResponseEntity<Void> reserveStock(@PathVariable("productId") Long productID, @RequestParam("quantity") Integer quantity){
-        inventoryService.reserveStock(productID, quantity);
+    @PostMapping("/reserve")
+    public ResponseEntity<Void> reserveStock(@RequestParam("orderId") Long orderId, @RequestParam("productId") Long productId, @RequestParam("quantity") Integer quantity){
+        inventoryService.reserveStock(orderId, productId, quantity);
         return ResponseEntity.ok().build();
     }
 
@@ -177,10 +177,10 @@ public class InventoryController {
             description = "Insufficient reserved stock to deduct"
         )
     })
-    @PostMapping("/{productId}/deduct")
+    @PostMapping("/deduct")
 public ResponseEntity<Void> deductStock(
-        @PathVariable Long productId,
-        @RequestParam Integer quantity){
+        @RequestParam("productId") Long productId,
+        @RequestParam("quantity") Integer quantity){
 
     inventoryService.deductStock(
             productId,
@@ -190,4 +190,26 @@ public ResponseEntity<Void> deductStock(
     return ResponseEntity.ok().build();
 }
 
+    @Operation(
+        summary = "Release Stock",
+        description = "Release reserved stock for a product"
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "Stock released successfully"
+        )
+    })
+    @PostMapping("/release")
+    public ResponseEntity<Void> releaseStock(
+        @RequestParam("productId") Long productId,
+        @RequestParam("quantity") Integer quantity){
+
+    inventoryService.releaseStock(
+            productId,
+            quantity
+    );
+
+    return ResponseEntity.ok().build();
+}
 }

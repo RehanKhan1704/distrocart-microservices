@@ -1,24 +1,24 @@
 package com.github.RehanKhan1704.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.DefaultValue;
+import jakarta.validation.constraints.Positive;
 
-public record orderRequest(
+public record OrderRequest(
 
-    @NotNull(message = "User ID cannot be null")
-    Long userId,
-
+    @Schema(description = "Unique identifier of the product", example = "1")
     @NotNull(message = "Product ID cannot be null")
     Long productId,
 
+    @Schema(description = "Quantity of the product ordered", example = "2")
     @NotNull(message = "Quantity cannot be null")
+    @Positive(message = "Quantity must be positive")
     Integer quantity,
 
+    @Schema(description = "Total price of the order", example = "19.98")
     @NotNull(message = "Total Price cannot be null")
-    Double totalPrice,
-
-    @DefaultValue("false")
-    Boolean paymentStatus
+    @Positive(message = "Total Price must be positive")
+    Double totalPrice
 ){
     
 }

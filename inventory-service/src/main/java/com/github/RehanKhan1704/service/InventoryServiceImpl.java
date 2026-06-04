@@ -8,8 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.RehanKhan1704.dto.InventoryRequest;
 import com.github.RehanKhan1704.dto.InventoryResponse;
 import com.github.RehanKhan1704.entity.Inventory;
+import com.github.RehanKhan1704.events.InventoryFailedEvent;
+import com.github.RehanKhan1704.events.InventoryReservedEvent;
 import com.github.RehanKhan1704.exception.InsufficientStockException;
 import com.github.RehanKhan1704.exception.InventoryNotFoundException;
+import com.github.RehanKhan1704.kafka.InventoryProducer;
 import com.github.RehanKhan1704.mapper.InventoryMapper;
 import com.github.RehanKhan1704.repository.InventoryRepository;
 
@@ -21,6 +24,7 @@ public class InventoryServiceImpl implements InventoryService{
 
     private final InventoryRepository inventoryRepository;
     private final InventoryMapper inventoryMapper;
+    private final InventoryProducer inventoryProducer;
 
     @Override
     @Transactional
@@ -68,14 +72,27 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
-    public void reserveStock(Long productId, Integer quantity){
+    public void reserveStock(Long orderId, Long productId, Integer quantity){
         Inventory inventory = inventoryRepository.findByProductId(productId)
         .orElseThrow(() -> new InventoryNotFoundException(productId));
         if(isInStock(productId, quantity)){
             inventory.setReservedQuantity(inventory.getReservedQuantity() + quantity);
             inventoryRepository.save(inventory);
+            inventoryProducer.publishReserved(
+                new InventoryReservedEvent(
+                        orderId,
+                        productId,
+                        quantity
+                )
+        );
         } else {
-            throw new InsufficientStockException(productId);
+            inventoryProducer.publishFailed(
+                new InventoryFailedEvent(
+                        orderId,
+                        productId,
+                        "Insufficient Stock"
+                )
+        );
         }
     }
 
@@ -90,5 +107,13 @@ public class InventoryServiceImpl implements InventoryService{
         } else {
             throw new InsufficientStockException(productId);
         }
+    }
+
+    @Override
+    public void releaseStock(Long productId, Integer quantity){
+        Inventory inventory = inventoryRepository.findByProductId(productId)
+        .orElseThrow(() -> new InventoryNotFoundException(productId));
+        inventory.setReservedQuantity(inventory.getReservedQuantity() - quantity);
+        inventoryRepository.save(inventory);
     }
 }

@@ -1,43 +1,26 @@
-version: '3.8'
-
 services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
 
-  discovery-server:
-    build: ./discovery-server
-    ports:
-      - "8761:8761"
-
-  api-gateway:
-    build: ./api-gateway
-    ports:
-      - "8080:8080"
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka
     depends_on:
-      - discovery-server
-
-  product-service:
-    build: ./product-service
+      - zookeeper
     ports:
-      - "8082:8082"
-    depends_on:
-      - discovery-server
-
-  inventory-service:
-    build: ./inventory-service
-    ports:
-      - "8083:8083"
-    depends_on:
-      - discovery-server
-
-  order-service:
-    build: ./order-service
-    ports:
-      - "8081:8081"
-    depends_on:
-      - discovery-server
-
-  auth-service:
-    build: ./auth-service
-    ports:
-      - "8084:8084"
-    depends_on:
-      - discovery-server
+      - "9092:9092" # Exposes the external listener to your host machine
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      # 1. Define the internal and external listener protocol names
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      # 2. Bind Kafka to listen on port 29092 inside Docker and port 9092 for the outside world
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092
+      # 3. CRITICAL: Tell clients how to reach Kafka based on where they are connecting from
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://127.0.0.1:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFERS_IN_TOPICS_REPLICATION_FACTOR: 1

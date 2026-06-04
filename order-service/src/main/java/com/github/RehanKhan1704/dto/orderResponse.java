@@ -1,18 +1,24 @@
 package com.github.RehanKhan1704.dto;
 
-import jakarta.validation.constraints.NotNull;
+import com.github.RehanKhan1704.entity.PaymentStatus;
 
-public record orderResponse(
-    @NotNull
-    Long userId,
-    
-    @NotNull
+import com.github.RehanKhan1704.entity.OrderStatus;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record OrderResponse(
+    @Schema(description = "Unique identifier of the order", example = "1")
+    Long id,
+    @Schema(description = "Unique identifier of the product", example = "1")
     Long productId,
-    @NotNull
+    @Schema(description = "Quantity of the product ordered", example = "2")
     Integer quantity,
-    @NotNull
+    @Schema(description = "Total price of the order", example = "19.98")
     Double totalPrice,
-    Boolean paymentStatus
+    @Schema(description = "Payment status of the order", example = "PENDING")
+    PaymentStatus paymentStatus,
+    @Schema(description = "Order Status", example = "CANCELLED")
+    OrderStatus orderStatus
 
 ){
     

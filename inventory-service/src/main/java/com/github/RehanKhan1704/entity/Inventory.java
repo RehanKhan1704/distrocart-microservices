@@ -1,6 +1,8 @@
 package com.github.RehanKhan1704.entity;
 
 import jakarta.persistence.*;
+import jakarta.ws.rs.DefaultValue;
+
 import java.io.Serializable;
 import lombok.*;
 
@@ -23,5 +25,6 @@ public class Inventory implements Serializable {
     private Integer quantity;
 
     @Column(name = "reserved_quantity",nullable = false)
-private Integer reservedQuantity = 0;
+    @DefaultValue("0")
+private Integer reservedQuantity;
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.RehanKhan1704.dto.ProductRequestDto;
 import com.github.RehanKhan1704.dto.ProductResponseDto;
 import com.github.RehanKhan1704.dto.ProductUpdateDto;
+import com.github.RehanKhan1704.service.ProductService;
 import com.github.RehanKhan1704.service.ProductServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/products")
 public class ProductController{
 
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
 
     @Operation(
         summary = "Get Product By Id",

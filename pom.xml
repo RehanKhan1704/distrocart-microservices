@@ -7,8 +7,9 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.4.3</version> <relativePath/>
-</parent>
+    <version>3.4.3</version>
+    <relativePath/>
+  </parent>
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
@@ -22,5 +23,6 @@
     <module>notification-service</module>
     <module>payment-service</module>
     <module>discovery-service</module>
+    <module>distrocart-common</module>
   </modules>
 </project>

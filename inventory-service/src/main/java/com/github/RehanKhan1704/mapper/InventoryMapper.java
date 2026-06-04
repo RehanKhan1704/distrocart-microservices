@@ -5,7 +5,9 @@ import com.github.RehanKhan1704.entity.Inventory;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 
+@Component
 @Mapper(componentModel = "spring")
 public interface InventoryMapper {
     Inventory toEntity(InventoryRequest request);

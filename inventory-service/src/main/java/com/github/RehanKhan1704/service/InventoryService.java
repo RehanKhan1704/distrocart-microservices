@@ -11,8 +11,9 @@ public interface InventoryService {
     InventoryResponse getInventoryById(Long id);
     Page<InventoryResponse> getAllInventory(Pageable pageable);
     InventoryResponse updateInventory(Long id, InventoryRequest request);
-    void deleteInventory(Long id);
-    Boolean isInStock(Long id, Integer quantity);
-    void deductStock(Long id, Integer Quantity);
-    void reserveStock(Long id, Integer quantity);
+    void deleteInventory(Long productId);
+    Boolean isInStock(Long productId, Integer quantity);
+    void deductStock(Long productId, Integer Quantity);
+    void reserveStock(Long orderId, Long productId, Integer quantity);
+    void releaseStock(Long productId, Integer quantity);
 }
